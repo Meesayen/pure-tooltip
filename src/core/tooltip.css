@@ -1,5 +1,9 @@
 @import './styles/tailwind.css';
 
+pure-tooltip {
+  display: inline-block;
+}
+
 #tooltip-arrow {
   z-index: -10;
   position-anchor: --tooltip-toggle;

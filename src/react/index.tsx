@@ -27,7 +27,7 @@ export function useTooltip<T extends HTMLElement>(
 
 export function Tooltip({ value, children }: TooltipProps) {
   const ref = useTooltip<HTMLSpanElement>(value)
-  return React.createElement('span', { ref }, children)
+  return React.createElement('div', { ref }, children)
 }
 
 export { bindTooltip, unbindTooltip }

@@ -5,19 +5,12 @@ import {
 } from '../core/tooltip'
 
 class PureTooltip extends HTMLElement {
-  private _value: TooltipBindingValue = null
-
   static get observedAttributes(): string[] {
     return ['text', 'position']
   }
 
   get value(): TooltipBindingValue {
-    return this._value ?? this.getAttribute('text') ?? null
-  }
-
-  set value(value: TooltipBindingValue) {
-    this._value = value
-    if (this.isConnected) bindTooltip(this, value)
+    return this.getAttribute('text')
   }
 
   connectedCallback(): void {

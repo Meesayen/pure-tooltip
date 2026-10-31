@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pure Tooltip - Custom Elements Demo</title>
+    <script type="module" crossorigin src="/pure-tooltip/assets/ce-8b_DIsdd.js"></script>
+    <link rel="modulepreload" crossorigin href="/pure-tooltip/assets/tooltip-BCCrnJxC.js">
+    <link rel="stylesheet" crossorigin href="/pure-tooltip/assets/tooltip-DSdsLVJG.css">
+  </head>
+  <body>
+    <div class="fixed top-4 left-4 z-40">
+      <pure-tooltip
+        class="ce-hover"
+        text="Configurable tooltip"
+        position="bottom"
+      >
+        <button class="h-10 w-10 rounded bg-gray-800 text-xs text-white">
+          TL
+        </button>
+      </pure-tooltip>
+    </div>
+    <div class="fixed top-4 right-4 z-40">
+      <pure-tooltip
+        class="ce-hover"
+        text="Configurable tooltip"
+        position="bottom"
+      >
+        <button class="h-10 w-10 rounded bg-gray-800 text-xs text-white">
+          TR
+        </button>
+      </pure-tooltip>
+    </div>
+    <div class="fixed bottom-4 left-4 z-40">
+      <pure-tooltip
+        class="ce-hover"
+        text="Configurable tooltip"
+        position="bottom"
+      >
+        <button class="h-10 w-10 rounded bg-gray-800 text-xs text-white">
+          BL
+        </button>
+      </pure-tooltip>
+    </div>
+    <div class="fixed bottom-4 right-4 z-40">
+      <pure-tooltip
+        class="ce-hover"
+        text="Configurable tooltip"
+        position="bottom"
+      >
+        <button class="h-10 w-10 rounded bg-gray-800 text-xs text-white">
+          BR
+        </button>
+      </pure-tooltip>
+    </div>
+    <div class="fixed top-4 left-1/2 z-40 -translate-x-1/2">
+      <pure-tooltip
+        class="ce-hover"
+        text="Configurable tooltip"
+        position="bottom"
+      >
+        <button class="h-10 w-10 rounded bg-gray-800 text-xs text-white">
+          T
+        </button>
+      </pure-tooltip>
+    </div>
+    <div class="fixed bottom-4 left-1/2 z-40 -translate-x-1/2">
+      <pure-tooltip
+        class="ce-hover"
+        text="Configurable tooltip"
+        position="bottom"
+      >
+        <button class="h-10 w-10 rounded bg-gray-800 text-xs text-white">
+          B
+        </button>
+      </pure-tooltip>
+    </div>
+    <div class="fixed top-1/2 left-4 z-40 -translate-y-1/2">
+      <pure-tooltip
+        class="ce-hover"
+        text="Configurable tooltip"
+        position="bottom"
+      >
+        <button class="h-10 w-10 rounded bg-gray-800 text-xs text-white">
+          L
+        </button>
+      </pure-tooltip>
+    </div>
+    <div class="fixed top-1/2 right-4 z-40 -translate-y-1/2">
+      <pure-tooltip
+        class="ce-hover"
+        text="Configurable tooltip"
+        position="bottom"
+      >
+        <button class="h-10 w-10 rounded bg-gray-800 text-xs text-white">
+          R
+        </button>
+      </pure-tooltip>
+    </div>
+
+    <section class="flex min-h-screen items-center justify-center px-4 py-24">
+      <div
+        class="w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-lg"
+      >
+        <h1 class="mb-4 text-xl font-bold">Custom Elements Demo</h1>
+
+        <div class="mb-4">
+          <label class="mb-1 block text-sm font-medium">Position</label>
+          <select
+            id="ce-position"
+            class="w-full rounded border border-gray-300 px-3 py-2"
+          >
+            <option value="top">top</option>
+            <option value="bottom" selected>bottom</option>
+            <option value="left">left</option>
+            <option value="right">right</option>
+          </select>
+        </div>
+
+        <div class="mb-6">
+          <label class="mb-1 block text-sm font-medium">Text</label>
+          <input
+            id="ce-text"
+            type="text"
+            value="Configurable tooltip"
+            class="w-full rounded border border-gray-300 px-3 py-2"
+          />
+        </div>
+
+        <p class="mb-3 text-sm text-gray-600">
+          Gli hover fissi sul viewport usano la configurazione sopra.
+        </p>
+
+        <div class="grid grid-cols-2 gap-3">
+          <pure-tooltip text="Tooltip on top" position="top">
+            <button class="rounded bg-blue-600 px-3 py-2 text-sm text-white">
+              top
+            </button>
+          </pure-tooltip>
+          <pure-tooltip text="Tooltip on bottom" position="bottom">
+            <button class="rounded bg-blue-600 px-3 py-2 text-sm text-white">
+              bottom
+            </button>
+          </pure-tooltip>
+          <pure-tooltip text="Tooltip on left" position="left">
+            <button class="rounded bg-blue-600 px-3 py-2 text-sm text-white">
+              left
+            </button>
+          </pure-tooltip>
+          <pure-tooltip text="Tooltip on right" position="right">
+            <button class="rounded bg-blue-600 px-3 py-2 text-sm text-white">
+              right
+            </button>
+          </pure-tooltip>
+        </div>
+      </div>
+    </section>
+
+  </body>
+</html>
