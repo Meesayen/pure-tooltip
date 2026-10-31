@@ -45,6 +45,12 @@
   <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
     <h1 class="mb-4 text-xl font-bold">Svelte Demo</h1>
 
+    <p class="mb-4 text-sm text-gray-600">
+      This tooltip auto-repositions based on the available space around its trigger.
+      Hover over the buttons at the corners and edges of the viewport to see how it moves
+      to stay fully visible.
+    </p>
+
     <div class="mb-4">
       <label class="mb-1 block text-sm font-medium">Position</label>
       <select bind:value={position} class="w-full rounded border border-gray-300 px-3 py-2">
@@ -61,7 +67,7 @@
     </div>
 
     <p class="mb-3 text-sm text-gray-600">
-      Gli hover fissi sul viewport usano la configurazione sopra.
+      The fixed hover triggers across the viewport use the configuration above.
     </p>
 
     <div class="grid grid-cols-2 gap-3">

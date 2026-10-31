@@ -1,7 +1,7 @@
 <template>
   <TooltipDirectiveTarget />
 
-  <!-- Hover fissi: 4 angoli + 4 centri dei lati -->
+  <!-- Fixed hovers: 4 corners + 4 side centers -->
   <div class="fixed top-4 left-4 z-40">
     <button
       v-tooltip="dynamicConfig"
@@ -74,6 +74,12 @@
     >
       <h1 class="mb-4 text-xl font-bold">Pure Tooltip Demo</h1>
 
+      <p class="mb-4 text-sm text-gray-600">
+        This tooltip auto-repositions based on the available space around its
+        trigger. Hover over the buttons at the corners and edges of the viewport
+        to see how it moves to stay fully visible.
+      </p>
+
       <div class="mb-4">
         <label class="mb-1 block text-sm font-medium">Position</label>
         <select
@@ -97,7 +103,8 @@
       </div>
 
       <p class="mb-3 text-sm text-gray-600">
-        Gli hover fissi sul viewport usano la configurazione sopra.
+        The fixed hover triggers across the viewport use the configuration
+        above.
       </p>
 
       <!-- Griglia delle permutazioni statiche -->
