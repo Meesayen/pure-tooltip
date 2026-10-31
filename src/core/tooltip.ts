@@ -21,6 +21,28 @@ let tooltipEl: HTMLElement | null = null
 let tooltipArrowEl: HTMLElement | null = null
 let timer: ReturnType<typeof setTimeout> | null = null
 
+// CSS anchor positioning is not supported in all browsers (e.g. Safari, Firefox).
+// Detect support and fall back to manual JS positioning when unavailable.
+const supportsAnchorPositioning =
+  typeof document !== 'undefined' &&
+  'anchorName' in document.documentElement.style
+
+// Tracks the currently visible trigger/config so the fallback can reposition on resize.
+let currentTrigger: HTMLElement | null = null
+let currentConfig: TooltipConfig | null = null
+
+if (!supportsAnchorPositioning && typeof window !== 'undefined') {
+  window.addEventListener('resize', () => {
+    if (currentTrigger && currentConfig && tooltipEl) {
+      positionFallback(
+        currentTrigger,
+        tooltipEl,
+        currentConfig.position ?? 'bottom',
+      )
+    }
+  })
+}
+
 const observer =
   typeof IntersectionObserver !== 'undefined'
     ? new IntersectionObserver(entries => {
@@ -52,6 +74,9 @@ function ensureElements(): void {
 
   if (tooltipEl && tooltipArrowEl) {
     injectStyles()
+    if (!supportsAnchorPositioning && tooltipArrowEl) {
+      tooltipArrowEl.style.display = 'none'
+    }
     return
   }
 
@@ -70,6 +95,10 @@ function ensureElements(): void {
 
   tooltipEl = document.querySelector('#tooltip')
   tooltipArrowEl = document.querySelector('#tooltip-arrow')
+
+  if (!supportsAnchorPositioning && tooltipArrowEl) {
+    tooltipArrowEl.style.display = 'none'
+  }
 }
 
 function applyConfig(config: TooltipConfig): void {
@@ -79,6 +108,54 @@ function applyConfig(config: TooltipConfig): void {
   const position = config.position ?? 'bottom'
   tooltipEl.setAttribute('position', position)
   tooltipArrowEl.setAttribute('position', position)
+}
+
+// Manual positioning used when CSS anchor positioning is unavailable.
+function positionFallback(
+  trigger: HTMLElement,
+  tooltip: HTMLElement,
+  position: TooltipConfig['position'],
+): void {
+  const tr = trigger.getBoundingClientRect()
+  const tw = tooltip.offsetWidth || tooltip.getBoundingClientRect().width
+  const th = tooltip.offsetHeight || tooltip.getBoundingClientRect().height
+  const vw = window.innerWidth
+  const vh = window.innerHeight
+  const gap = 8
+  const margin = 4
+
+  let place: TooltipConfig['position'] = position ?? 'bottom'
+
+  // Flip if there is not enough space in the desired direction.
+  if (place === 'top' && tr.top - th - gap < margin) place = 'bottom'
+  if (place === 'bottom' && tr.bottom + th + gap > vh - margin) place = 'top'
+  if (place === 'left' && tr.left - tw - gap < margin) place = 'right'
+  if (place === 'right' && tr.right + tw + gap > vw - margin) place = 'left'
+
+  let top = 0
+  let left = 0
+
+  if (place === 'top') {
+    top = tr.top - th - gap
+    left = tr.left + tr.width / 2 - tw / 2
+  } else if (place === 'bottom') {
+    top = tr.bottom + gap
+    left = tr.left + tr.width / 2 - tw / 2
+  } else if (place === 'left') {
+    top = tr.top + tr.height / 2 - th / 2
+    left = tr.left - tw - gap
+  } else {
+    top = tr.top + tr.height / 2 - th / 2
+    left = tr.right + gap
+  }
+
+  // Clamp within the viewport.
+  left = Math.max(margin, Math.min(left, vw - tw - margin))
+  top = Math.max(margin, Math.min(top, vh - th - margin))
+
+  tooltip.style.margin = '0'
+  tooltip.style.top = `${top}px`
+  tooltip.style.left = `${left}px`
 }
 
 export function bindTooltip(el: HTMLElement, value: TooltipBindingValue): void {
@@ -103,9 +180,24 @@ export function bindTooltip(el: HTMLElement, value: TooltipBindingValue): void {
     observer?.observe(el)
     el.style.setProperty('anchor-name', '--tooltip-toggle')
     if (state.config) applyConfig(state.config)
+
+    currentTrigger = el
+    currentConfig = state.config
+
     timer = setTimeout(() => {
       tooltipEl?.showPopover()
-      tooltipArrowEl?.showPopover()
+      if (supportsAnchorPositioning) {
+        tooltipArrowEl?.showPopover()
+      }
+
+      if (!supportsAnchorPositioning && tooltipEl && state.config) {
+        requestAnimationFrame(() => {
+          if (tooltipEl) {
+            positionFallback(el, tooltipEl, state.config?.position ?? 'bottom')
+          }
+        })
+      }
+
       timer = null
     }, 600)
   }
@@ -116,6 +208,8 @@ export function bindTooltip(el: HTMLElement, value: TooltipBindingValue): void {
     el.style.removeProperty('anchor-name')
     tooltipEl?.hidePopover()
     tooltipArrowEl?.hidePopover()
+    currentTrigger = null
+    currentConfig = null
   }
 
   el.addEventListener('mouseenter', state.mouseenter)
