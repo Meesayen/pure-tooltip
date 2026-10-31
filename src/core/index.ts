@@ -1,3 +1,4 @@
-export const name = 'pure-tooltip'
+export * from './types'
+export * from './tooltip'
 
-export {}
+export const name = 'pure-tooltip'
