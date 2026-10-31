@@ -1,3 +1,5 @@
+export { default as TooltipDirectiveTarget } from './TooltipDirectiveTarget.vue'
+
 export * from '../core'
 
 export { default as tooltipDirective } from './v-tooltip'
