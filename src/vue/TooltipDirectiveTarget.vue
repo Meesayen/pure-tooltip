@@ -9,21 +9,21 @@
     id="tooltip"
     popover="manual"
     anchor="tooltip-toggle"
-    class="max-h-50 w-fit overflow-visible rounded-lg bg-gray-900 px-3 py-2 text-center leading-3 text-white"
+    class="max-h-50 w-fit overflow-visible rounded-md bg-slate-900 px-3 py-2 text-center leading-3 text-white text-sm"
   >
     <span id="tooltip-text" class="type-label-sm whitespace-pre"></span>
   </div>
 </template>
 
 <style>
+@reference '../core/styles/tailwind.css';
+
 #tooltip-arrow {
   z-index: -10;
   position-anchor: --tooltip-toggle;
-  background: transparent;
-  border: 0;
 
-  &[position="top"],
-  &[position="bottom"] {
+  &[position='top'],
+  &[position='bottom'] {
     margin-block: 4px;
     position-try-fallbacks: flip-block;
 
@@ -31,11 +31,11 @@
     width: 8px;
     &:after {
       z-index: -10;
-      content: "";
+      content: '';
       position: absolute;
       width: 100%;
       height: 100%;
-      background: #224;
+      @apply bg-gray-900;
       clip-path: polygon(
         50% 0,
         100% 4px,
@@ -48,8 +48,8 @@
       );
     }
   }
-  &[position="left"],
-  &[position="right"] {
+  &[position='left'],
+  &[position='right'] {
     margin-inline: 4px;
     position-try-fallbacks: flip-inline;
 
@@ -57,11 +57,11 @@
     width: calc(anchor-size(--tooltip width) + 4px);
     &:after {
       z-index: -10;
-      content: "";
+      content: '';
       position: absolute;
       width: 100%;
       height: 100%;
-      background: #224;
+      @apply bg-gray-900;
       clip-path: polygon(
         0 50%,
         6px 100%,
@@ -75,19 +75,19 @@
     }
   }
 
-  &[position="top"] {
+  &[position='top'] {
     position-area: top center;
   }
 
-  &[position="bottom"] {
+  &[position='bottom'] {
     position-area: bottom center;
   }
 
-  &[position="left"] {
+  &[position='left'] {
     position-area: center left;
   }
 
-  &[position="right"] {
+  &[position='right'] {
     position-area: center right;
   }
 }
@@ -99,29 +99,19 @@
   position-anchor: --tooltip-toggle;
   anchor-name: --tooltip;
   transform: translateZ(1px);
-  max-height: 200px;
-  width: fit-content;
-  overflow: visible;
-  border-radius: 6px;
-  background: #224;
-  padding-inline: 12px;
-  padding-block: 8px;
-  text-align: center;
-  color: white;
-  border: 0;
   /*inset-block-start: anchor(bottom);
   justify-self: safe anchor-center;*/
 
-  &[position="top"],
-  &[position="bottom"] {
+  &[position='top'],
+  &[position='bottom'] {
     margin-block: 8px;
   }
-  &[position="left"],
-  &[position="right"] {
+  &[position='left'],
+  &[position='right'] {
     margin-inline: 8px;
   }
 
-  &[position="top"] {
+  &[position='top'] {
     position-area: top;
     position-try-fallbacks:
       top span-all,
@@ -129,7 +119,7 @@
       bottom span-all;
   }
 
-  &[position="bottom"] {
+  &[position='bottom'] {
     position-area: bottom;
     position-try-fallbacks:
       bottom span-all,
@@ -137,7 +127,7 @@
       top span-all;
   }
 
-  &[position="left"] {
+  &[position='left'] {
     position-area: left;
     position-try-fallbacks:
       span-all left,
@@ -145,7 +135,7 @@
       span-all right;
   }
 
-  &[position="right"] {
+  &[position='right'] {
     position-area: right;
     position-try-fallbacks:
       span-all right,
