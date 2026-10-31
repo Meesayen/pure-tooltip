@@ -160,6 +160,20 @@ pnpm dev:demo:svelte  # Svelte
 pnpm dev:demo:ce      # Custom Elements
 ```
 
+## Browser compatibility
+
+| Feature                          | Chrome / Edge | Safari                  | Firefox                 |
+| -------------------------------- | ------------- | ----------------------- | ----------------------- |
+| Tooltip rendering                | ✅            | ✅                      | ✅                      |
+| CSS anchor positioning           | ✅ (native)   | ❌ (JS fallback)        | ❌ (JS fallback)        |
+| Auto-reposition on open          | ✅ (native)   | ✅ (JS flip)            | ✅ (JS flip)            |
+| Auto-reposition on scroll/resize | ✅ (native)   | ⚠️ (hides on scroll)    | ⚠️ (hides on scroll)    |
+| Arrow indicator                  | ✅            | ❌ (hidden in fallback) | ❌ (hidden in fallback) |
+
+Browsers without CSS anchor positioning support use a JavaScript fallback that
+positions the tooltip on open with viewport-flip and clamping. The arrow
+indicator is hidden in fallback mode.
+
 ## Notes
 
 - Styles are injected by the core on first use (`bindTooltip`), so no Tailwind setup is required by consumers.
