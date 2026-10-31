@@ -6,9 +6,20 @@ Tooltip positioning is driven by CSS anchor positioning. Styles are injected by 
 
 ## Install
 
+This package is published on [GitHub Packages](https://github.com/Meesayen/pure-tooltip/packages).
+
 ```bash
-pnpm add pure-tooltip
+pnpm add @meesayen/pure-tooltip
 ```
+
+GitHub Packages requires configuring the registry for the `@meesayen` scope. Add the following to your project (or user) `.npmrc`:
+
+```ini
+@meesayen:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=<GITHUB_TOKEN>
+```
+
+`<GITHUB_TOKEN>` must be a GitHub personal access token with `read:packages` scope (and `write:packages` if you publish).
 
 Peer dependencies (all optional, install only the frameworks you use):
 
