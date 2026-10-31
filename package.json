@@ -1,6 +1,6 @@
 {
   "name": "@meesayen/pure-tooltip",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Framework-agnostic tooltip library with Vue, React, Svelte and Custom Elements outputs",
   "repository": {
     "type": "git",
