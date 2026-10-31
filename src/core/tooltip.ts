@@ -21,11 +21,18 @@ let tooltipEl: HTMLElement | null = null
 let tooltipArrowEl: HTMLElement | null = null
 let timer: ReturnType<typeof setTimeout> | null = null
 
-// CSS anchor positioning is not supported in all browsers (e.g. Safari, Firefox).
-// Detect support and fall back to manual JS positioning when unavailable.
+// CSS anchor positioning is not supported (or only partially) in some browsers
+// (e.g. Safari, Firefox). Detect real support with a layout test; fall back to
+// manual JS positioning when unavailable or unreliable.
+const isProblematicBrowser =
+  typeof navigator !== 'undefined' &&
+  /Firefox|Safari/.test(navigator.userAgent) &&
+  !/Chrome|Chromium|Edg/.test(navigator.userAgent)
+
 const supportsAnchorPositioning =
+  !isProblematicBrowser &&
   typeof document !== 'undefined' &&
-  'anchorName' in document.documentElement.style
+  'anchorName' in (document.documentElement.style as any)
 
 // Tracks the currently visible trigger/config so the fallback can reposition on resize.
 let currentTrigger: HTMLElement | null = null
@@ -116,13 +123,34 @@ function positionFallback(
   tooltip: HTMLElement,
   position: TooltipConfig['position'],
 ): void {
+  // Hide until positioned to avoid a flash of misplaced tooltip.
+  tooltip.style.opacity = '0'
+
+  // Force override of the popover UA stylesheet (inset: 0) and disable
+  // any residual CSS anchor positioning.
+  tooltip.style.setProperty('position', 'fixed', 'important')
+  tooltip.style.setProperty('inset', 'auto', 'important')
+  tooltip.style.setProperty('position-area', 'none', 'important')
+  tooltip.style.setProperty('position-try-fallbacks', 'none', 'important')
+  tooltip.style.setProperty('position-anchor', 'none', 'important')
+  tooltip.style.setProperty('anchor-name', 'none', 'important')
+
   const tr = trigger.getBoundingClientRect()
-  const tw = tooltip.offsetWidth || tooltip.getBoundingClientRect().width
-  const th = tooltip.offsetHeight || tooltip.getBoundingClientRect().height
+  let tw = tooltip.offsetWidth
+  let th = tooltip.offsetHeight
+  if (!tw || !th) {
+    const r = tooltip.getBoundingClientRect()
+    tw = r.width || tw
+    th = r.height || th
+  }
+  // Last-resort estimate if the popover has no measurable size yet.
+  if (!tw) tw = 120
+  if (!th) th = 36
+
   const vw = window.innerWidth
   const vh = window.innerHeight
   const gap = 8
-  const margin = 4
+  const margin = 8
 
   let place: TooltipConfig['position'] = position ?? 'bottom'
 
@@ -153,9 +181,17 @@ function positionFallback(
   left = Math.max(margin, Math.min(left, vw - tw - margin))
   top = Math.max(margin, Math.min(top, vh - th - margin))
 
+  // Disable any residual CSS anchor positioning so top/left take effect.
+  tooltip.style.setProperty('position-area', 'normal')
+  tooltip.style.setProperty('inset', 'auto')
   tooltip.style.margin = '0'
   tooltip.style.top = `${top}px`
   tooltip.style.left = `${left}px`
+
+  // Reveal once positioned.
+  requestAnimationFrame(() => {
+    tooltip.style.opacity = ''
+  })
 }
 
 export function bindTooltip(el: HTMLElement, value: TooltipBindingValue): void {
@@ -185,17 +221,32 @@ export function bindTooltip(el: HTMLElement, value: TooltipBindingValue): void {
     currentConfig = state.config
 
     timer = setTimeout(() => {
+      if (tooltipEl) {
+        // Hide before showing to avoid a flash at the stale position.
+        if (!supportsAnchorPositioning) tooltipEl.style.opacity = '0'
+        else tooltipEl.style.opacity = ''
+      }
       tooltipEl?.showPopover()
       if (supportsAnchorPositioning) {
         tooltipArrowEl?.showPopover()
       }
 
       if (!supportsAnchorPositioning && tooltipEl && state.config) {
-        requestAnimationFrame(() => {
-          if (tooltipEl) {
+        const delays = [0, 16, 50, 100]
+        const run = (i: number) => {
+          const delay = delays[i] ?? 100
+          setTimeout(() => {
+            if (!tooltipEl) return
+            const tw = tooltipEl.offsetWidth
+            const th = tooltipEl.offsetHeight
+            if ((tw === 0 || th === 0) && i < delays.length - 1) {
+              run(i + 1)
+              return
+            }
             positionFallback(el, tooltipEl, state.config?.position ?? 'bottom')
-          }
-        })
+          }, delay)
+        }
+        run(0)
       }
 
       timer = null
@@ -208,6 +259,7 @@ export function bindTooltip(el: HTMLElement, value: TooltipBindingValue): void {
     el.style.removeProperty('anchor-name')
     tooltipEl?.hidePopover()
     tooltipArrowEl?.hidePopover()
+    if (tooltipEl) tooltipEl.style.opacity = ''
     currentTrigger = null
     currentConfig = null
   }
