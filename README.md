@@ -132,6 +132,8 @@ The custom element is registered as `pure-tooltip` and uses its attributes (`tex
 
 ## Demo
 
+Live demo: https://meesayen.github.io/pure-tooltip/index.html
+
 Multi-page demo is built into `docs/`:
 
 ```bash

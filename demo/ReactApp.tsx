@@ -43,6 +43,12 @@ export default function ReactApp() {
         <div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
           <h1 className="mb-4 text-xl font-bold">React Demo</h1>
 
+          <p className="mb-4 text-sm text-gray-600">
+            This tooltip auto-repositions based on the available space around
+            its trigger. Hover over the buttons at the corners and edges of the
+            viewport to see how it moves to stay fully visible.
+          </p>
+
           <div className="mb-4">
             <label className="mb-1 block text-sm font-medium">Position</label>
             <select
@@ -68,7 +74,8 @@ export default function ReactApp() {
           </div>
 
           <p className="mb-3 text-sm text-gray-600">
-            Gli hover fissi sul viewport usano la configurazione sopra.
+            The fixed hover triggers across the viewport use the configuration
+            above.
           </p>
 
           <div className="grid grid-cols-2 gap-3">
